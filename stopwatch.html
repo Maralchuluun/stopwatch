@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: chartreuse;
+        }
+        .stopwatch{
+            background-color: violet;
+            width: 60%;
+            height: 25vh;
+            margin: auto;
+            padding-top: 10px;
+            margin-top: 15%;
+            padding-bottom: 20px;
+            
+        }
+        button{
+            background-color: cyan;
+            border: 1px solid blue;
+            width: 100px;
+            height: 30px;
+        }
+        #lap {
+        margin-top: 40px;
+        height: 400px;
+        scroll-behavior: smooth;
+        font-size: 30px;
+        width: 220px;
+        }
+    </style>
+</head>
+<body>
+    <center><div class="stopwatch">
+        <h1>StopWatch</h1>
+        <h1 id="display">00:00:00:00</h1>
+        <button id="handler" onclick="startstop()">Start</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="lap()">Lap</button>
+        <h1>Laps:</h1>
+            <div id="lap">
+                <p id="lapRecord"></p>
+            </div>
+    </div></center>
+    <script>
+        let milliseconds=0;
+        let seconds=0;
+        let minutes=0;
+        let hours=0;
+        let displaymilliseconds=0;
+        let displayseconds=0;
+        let displayminutes=0;
+        let displayhours=0;
+        let status='Stopped';
+        let interval='';
+        let laps = null;
+        let lapNow = null;
+
+        function startwatch(){
+            milliseconds++;
+            if(milliseconds/100===1){
+                milliseconds=0;
+                seconds++;
+                if(seconds/60===1){
+                    seconds=0;
+                    minutes++;
+                    if(minutes/60===1){
+                        minutes=0;
+                        hours++;
+                    }
+                }
+            }
+            if(milliseconds<10){
+                displaymilliseconds='0'+milliseconds.toString();
+            }else{
+                displaymilliseconds=milliseconds;
+            }
+            if(seconds<10){
+                displayseconds='0'+seconds.toString();
+            }else{
+                displayseconds=seconds;
+            }
+            if(minutes<10){
+                displayminutes='0'+minutes.toString();
+            }else{
+                displayminutes=minutes;
+            }
+            if(hours<10){
+                displayhours='0'+hours.toString();
+            }else{
+                displayhours=hours;
+            }
+            document.getElementById('display').innerHTML=displayhours+':'+displayminutes+':'+displayseconds+':'+displaymilliseconds;
+        }
+        function startstop(){
+            if(status=='Stopped'){
+                interval=window.setInterval(startwatch,10);
+                document.getElementById('handler').innerHTML='Stop';
+                status='Started';
+            }else if(status=='Started'){
+                window.clearInterval(interval);
+                document.getElementById('handler').innerHTML='Start';
+                status='Stopped';
+            }
+        }
+        function reset()
+        {
+            milliseconds=0;
+         	seconds = 0;
+	        hours = 0;
+	        minutes = 0;
+	        window.clearInterval(interval);
+        	document.getElementById('display').innerHTML = ' 00:00:00:00 ';
+        	document.getElementById('handler').innerHTML = 'Start';
+        	status = 'Stopped';
+        }
+        function lap()
+        {
+            lapNow = displayhours + " : " + displayminutes + " : " + displayseconds + " : " + displaymilliseconds+"  ";
+            laps = document.getElementById('lapRecord').innerHTML + lapNow;
+            document.getElementById('lapRecord').innerHTML = laps;
+        }
+    </script>
+</body>
+</html>
